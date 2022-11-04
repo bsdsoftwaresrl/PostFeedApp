@@ -1,0 +1,6 @@
+module Pods_PostFeed_app {
+  umbrella header "Pods-PostFeed app-umbrella.h"
+
+  export *
+  module * { export * }
+}

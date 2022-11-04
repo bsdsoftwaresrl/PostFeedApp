@@ -1,0 +1,6 @@
+framework module Pods_PostFeed_appTests {
+  umbrella header "Pods-PostFeed appTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
