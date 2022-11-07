@@ -1,26 +1,10 @@
-//
-//
-//  ViewController.swift
-//  PostFeed app
-//
-//  Created by Jean Paul Elleri on 02/11/22.
-//
 
 import UIKit
 
 class PostDetailViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    
-    let items = [PostData(author: "1 title", date: Date(), likes: 0, images: ["https://picsum.photos/200"]),
-                 PostData(author: "2 title", date: Date(), likes: 0, images: ["https://picsum.photos/200"]),
-                 PostData(author: "3 title", date: Date(), likes: 0, images: ["https://picsum.photos/200"]),
-                 PostData(author: "4 title", date: Date(), likes: 0, images: ["https://picsum.photos/200"]),
-                 PostData(author: "5 title", date: Date(), likes: 0, images: ["https://picsum.photos/200"]),
-                 PostData(author: "6 title", date: Date(), likes: 0, images: ["https://picsum.photos/200"]),
-                 PostData(author: "7 title", date: Date(), likes: 0, images: ["https://picsum.photos/200"]),
-                 PostData(author: "8 title", date: Date(), likes: 0, images: ["https://picsum.photos/200"])]
-    
+        
     let CELL_ID = "CELL_ID"
-    var post: PostData?
+    var post: Post?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,19 +26,13 @@ class PostDetailViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     
-    
-    
-    
-    
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        items.count
+        post?.images.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_ID, for: indexPath) as! PostImgCell
-        let dateFormatter = DateFormatter()
-        cell.data = self.items[indexPath.row]
+        cell.data = self.post
         
         return cell
     }
@@ -69,15 +47,13 @@ class PostDetailViewController: UIViewController, UICollectionViewDataSource, UI
 }
 
 
-
-
-
 class PostImgCell: UICollectionViewCell {
-    
-    var data: PostData? {
+    var data: Post? {
         didSet {
             guard let data = data else {return}
-            bg.load(URLAddress: data.images[0])
+            for image in data.images{
+                bg.load(URLAddress: image)
+            }
         }
     }
     
@@ -97,7 +73,6 @@ class PostImgCell: UICollectionViewCell {
         bg.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         bg.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         bg.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        
     }
     
     required init?(coder: NSCoder) {
