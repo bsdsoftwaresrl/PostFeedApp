@@ -118,6 +118,12 @@ class Post: NSObject {
     var likes: Int = 0
     var images: [String] = []
     
+    override init(){
+        self.author = ""
+        self.date = Date()
+        self.likes = 0
+        self.images = []
+    }
     
     init(json : Dictionary<String, Any>) {
         

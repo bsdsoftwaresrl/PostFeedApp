@@ -4,12 +4,15 @@ import UIKit
 class PostDetailViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
         
     let CELL_ID = "CELL_ID"
-    var post: Post?
+    var post: Post = Post()
+    
+    private var cv : UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
         view.addSubview(cv)
         cv.register(PostImgCell.self, forCellWithReuseIdentifier: CELL_ID)
         
@@ -27,13 +30,13 @@ class PostDetailViewController: UIViewController, UICollectionViewDataSource, UI
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        post?.images.count ?? 0
+        post.images.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_ID, for: indexPath) as! PostImgCell
-        cell.data = self.post
-        
+        let cell = cv.dequeueReusableCell(withReuseIdentifier: CELL_ID, for: indexPath) as! PostImgCell
+
+        cell.image = self.post.images[indexPath.row]
         return cell
     }
     
@@ -48,21 +51,18 @@ class PostDetailViewController: UIViewController, UICollectionViewDataSource, UI
 
 
 class PostImgCell: UICollectionViewCell {
-    var data: Post? {
+    var image: String? {
         didSet {
-            guard let data = data else {return}
-            for image in data.images{
-                bg.load(URLAddress: image)
-            }
+            guard let data = image else {return}
+            bg.load(URLAddress: data)
         }
     }
     
-    fileprivate let bg: UIImageView = {
+    fileprivate var bg: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        
         return iv
     }()
     
@@ -73,6 +73,11 @@ class PostImgCell: UICollectionViewCell {
         bg.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         bg.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         bg.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        bg.image = nil
     }
     
     required init?(coder: NSCoder) {
